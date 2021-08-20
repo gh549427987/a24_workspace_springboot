@@ -1,0 +1,23 @@
+{
+    "game_data": {
+        "fightType": 1,
+        "playerWon": 1,
+        "opponentUnionId": "",
+        "playerActor": "Ricky_Conlan",
+        "opponentActor": "Adonis_Creed",
+        "playerHitsLanded": 55,
+        "playerHitsBlocked": 33,
+        "opponentHitsReceived": 6,
+        "opponentHitsBlocked": 1,
+        "playerKnockedDown": 5,
+        "playerWasKnockedDown": 0,
+        "begin": 0,
+        "end": 0
+    },
+    "app": "creed",
+    "appkey": "e46905222d70c873",
+    "app_channel": "netvios",
+    "unionid": "oVYwh1Mqhir_ybuPtKTeTnbV9BIk",
+    "extra_data": "YWNjb3VudElkPWFlYmZrY2p1dmViY2VibmxAcGMubmV0ZWFzZS53aW4uMTYzLmNvbSZsb2dpbl9jaGFubmVsPXdlY2hhdF9tcF92ciZzdG9yZUFkZHJlc3M95a6J5b6955yBL+WQiOiCpeW4gi/lupDpmLPljLovYWRzMSZzdG9yZU5hbWU95rWL6K+VMDM0",
+    "sign": "eb42e62b66db4831f040ee398223b4a62b252f5ae3339a1d425ed1cbde5ab2c9"
+}
