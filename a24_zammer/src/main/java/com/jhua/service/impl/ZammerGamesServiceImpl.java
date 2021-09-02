@@ -10,10 +10,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.util.List;
 
@@ -28,15 +27,36 @@ public class ZammerGamesServiceImpl implements ZammerGamesService {
     @Autowired
     ZammerGamesMapper zammerGamesMapper;
 
+    //新增代码 开始   注意此段
+    public static ZammerGamesServiceImpl zammerGamesServiceImpl;
+
+    @PostConstruct
+    public void init() {
+        System.out.println("zammerGamesMapper init");
+        zammerGamesServiceImpl = this;
+    }
+    //新增代码 结束
+
+    /*
+     * @Author liu-miss
+     * @Description //TODO 收集所有数据
+     * @Date  9/1/2021
+     * @Param []
+     * @return int
+     **/
     @Override
     public int collectZammerGameInfo() throws Exception {
-
-
-        ZammerGamesMapper zammerGamesMapper = (ZammerGamesMapper) Class.forName("com.jhua.dao.ZammerGamesMapper").newInstance();
 
         int total = 0;
         int count = 0;
         int page = 1;
+//        ZammerGames zammerGames2 = zammerGamesMapper.selectByGameId(1);
+        ZammerGames zammerGames1 = zammerGamesServiceImpl.zammerGamesMapper.selectByPrimaryKey(1);
+
+
+        // 获取所有的id
+        List<Integer> allID = zammerGamesMapper.selectByAllID();
+        System.out.println(allID);
         while (count <= total) {
 
             OkHttpClient client = new OkHttpClient().newBuilder()
@@ -51,7 +71,7 @@ public class ZammerGamesServiceImpl implements ZammerGamesService {
                     .addHeader("Referer", "http://vrservice.zamertech.com/client48/zstore.aspx?tagid=0&downtype=1")
 //                .addHeader("Accept-Encoding", "gzip, deflate, br")
                     .addHeader("Accept-Language", "en-US,en;q=0.8")
-                    .addHeader("Cookie", "client_gamelist_hotsearch=%7B%22list%22%3A%5B%5D%7D; client_pid=0; ASP.NET_SessionId=zyw543xhfulpgjjjzkpr5tt2; test_category=0; test_showdevtools=0; test_showoffline=0; test_alpha=0; test_onlinepre=0; test_greenchannel1=0; test_greenchannel2=0; copyright=0; client_dn=00155DD3DD00; client_cv=3105; old_dns=00155DD3DD00; mall_down_ids=; mall_down_count=0; gri=13480945722; grp=bd59177261eee51d089892e4f0e0ed9f")
+                    .addHeader("Cookie", "client_gamelist_hotsearch=%7B%22list%22%3A%5B%5D%7D; client_pid=0; ASP.NET_SessionId=soxg0kojmml4y0y2qjapq4kq; test_category=0; test_showdevtools=0; test_showoffline=0; test_alpha=0; test_onlinepre=0; test_greenchannel1=0; test_greenchannel2=0; copyright=0; client_dn=00FF6F575DD2; client_cv=3105; old_dns=00FF6F575DD2; gri=13480945722; grp=bd59177261eee51d089892e4f0e0ed9f; mall_down_ids=2236%2C; mall_down_count=1")
                     .build();
             Response response = client.newCall(request).execute();
             String s = new String(response.body().bytes());
@@ -70,21 +90,33 @@ public class ZammerGamesServiceImpl implements ZammerGamesService {
 
                 Integer contentid = (Integer) game.get("contentid");
                 ZammerGames zammerGames = zammerGamesMapper.selectByGameId(contentid);
+                if (zammerGames == null) {
+                    continue;
+                }
                 zammerGames.setTagIds((String) game.get("tagids"));
                 zammerGames.setTagNames((String) game.get("tagnames"));
                 zammerGames.setSummary((String) game.get("summary"));
+                zammerGames.setOnline(1);
 
+                Integer id = zammerGames.getId();
+                allID.remove(id);
                 zammerGamesMapper.updateByPrimaryKey(zammerGames);
 
                 count++;
             }
 
+            // 遍历所有游戏
+            for (Integer id : allID) {
+                ZammerGames zammerGames = zammerGamesMapper.selectByPrimaryKey(id);
+                zammerGames.setOnline(0);
+            }
             page++;
         }
         return 0;
     }
 
     @Override
+    @Deprecated
     public int collectZammerGameInfo(File file) throws Exception {
 
         ZammerUtils zammerUtils = new ZammerUtils();
@@ -139,10 +171,20 @@ public class ZammerGamesServiceImpl implements ZammerGamesService {
         return zammerGames;
     }
 
-//    @Override
-//    public int updateByZammerGames(ZammerGames zammerGames) {
-//
-//        int i = zammerGamesMapper.updateByPrimaryKey(zammerGames);
-//        return i;
-//    }
+    @Override
+    public ZammerGames selectByPrimaryKey(Integer id) {
+        return zammerGamesMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public List<Integer> selectByAllID() {
+        return zammerGamesMapper.selectByAllID();
+    }
+
+    @Override
+    public int updateByPrimaryKey(ZammerGames zammerGames) {
+        int i = zammerGamesMapper.updateByPrimaryKey(zammerGames);
+        return i;
+    }
+
 }

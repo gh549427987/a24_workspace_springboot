@@ -3,6 +3,7 @@ package com.jhua.service;
 import com.jhua.model.ZammerGames;
 
 import java.io.File;
+import java.util.List;
 
 public interface ZammerGamesService {
 
@@ -12,5 +13,10 @@ public interface ZammerGamesService {
 
     ZammerGames selectByGameId(int game_id);
 
-//    int updateByZammerGames(ZammerGames zammerGames);
+    ZammerGames selectByPrimaryKey(Integer id);
+
+    List<Integer> selectByAllID();
+
+    int updateByPrimaryKey(ZammerGames zammerGames);
+
 }

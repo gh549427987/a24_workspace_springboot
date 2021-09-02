@@ -14,6 +14,17 @@ spring:
     port: 6379
     password:
     timeout: 5000
+  application:
+    name: springfox-swagger
+
+# ===== 自定义swagger配置 ===== #
+swagger:
+  enable: true
+  application-name: ${spring.application.name}
+  application-version: 1.0
+  application-description: springfox swagger 3.0整合Demo
+  try-host: http://localhost:${server.port}
+
 
 #密码加密传输，前端公钥加密，后端私钥解密
 rsa:

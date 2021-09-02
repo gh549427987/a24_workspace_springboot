@@ -7,9 +7,11 @@ import com.jhua.dao.GamesImagesMapper;
 import com.jhua.dao.ZammerGamesMapper;
 import com.jhua.model.GamesImages;
 import com.jhua.model.ZammerGames;
+import com.jhua.service.ZammerGamesService;
 import com.jhua.service.impl.ZammerGamesServiceImpl;
 import com.jhua.utils.ZammerUtils;
 import netscape.javascript.JSObject;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author xiejiehua
@@ -34,6 +37,10 @@ public class test {
 
     @Autowired
     GamesImagesMapper gamesImagesMapper;
+
+
+    @Autowired
+    ZammerGamesService zammerGamesService;
 
     @Test
     public void t1() throws IOException {
@@ -103,10 +110,110 @@ public class test {
         gamesImagesMapper.selectByGameId(1);
     }
 
+    /*
+     * @Author liu-miss
+     * @Description //TODO 写入exe路径
+     * @Date  8/30/2021
+     * @Param []
+     * @return void
+     **/
+    @Test
+    void t6() {
+        File file=new File("C:\\Users\\wb.xiejiehua\\IdeaProjects\\a24_workspace_springboot\\a24_zammer\\src\\main\\resources\\852.json");
+        String read = "";
+        try {
+            BufferedReader content = new BufferedReader(new FileReader(file));
+            read = content.readLine();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        JSONObject jsonObject = JSONObject.parseObject(read);
 
+        for (String game_id : jsonObject.keySet()) {
+            ZammerGames zammerGames = null;
+            try {
+                zammerGames = zammerGamesMapper.selectByGameId(Integer.parseInt(game_id));
 
-    public static void main(String[] args) throws IOException {
+                String exe = jsonObject.getString(game_id);
 
-        t3();
+                if (zammerGames != null) {
+                    zammerGames.setExeFiles(exe);
+                    zammerGamesMapper.updateByPrimaryKey(zammerGames);
+                } else {
+                    ZammerGames zammerGames1 = new ZammerGames();
+                    zammerGames1.setZammerGameId(Integer.parseInt(game_id));
+                    zammerGames1.setExeFiles(exe);
+                    zammerGamesMapper.insert(zammerGames1);
+                }
+
+            } catch (NumberFormatException e) {
+                System.out.println("steam 的游戏 :" + game_id);
+            }
+        }
+        System.out.println(jsonObject);
     }
+
+    @Test
+    void t7() throws IOException {
+
+        try {
+            File file = new File("C:\\Users\\wb.xiejiehua\\IdeaProjects\\a24_workspace_springboot\\a24_zammer\\src\\main\\resources\\tag.txt");
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+
+            String line = reader.readLine();
+            ZammerGames zammerGames;
+            while (line != null) {
+                System.out.println(line);
+                // read next line
+                line = reader.readLine();
+
+                // 处理JSON
+                JSONObject jsonObject = JSONObject.parseObject(line);
+                Integer contentid = (Integer) jsonObject.get("contentid");
+                String image = (String) jsonObject.get("image");
+                String tagnames = (String) jsonObject.get("tagnames");
+                String tagids = (String) jsonObject.get("tagids");
+
+                zammerGames = zammerGamesMapper.selectByGameId(contentid);
+
+                if (zammerGames != null) {
+
+                    zammerGames.setImgUrl(image);
+                    zammerGames.setTagNames(tagnames);
+                    zammerGames.setTagIds(tagids);
+
+                    zammerGamesMapper.updateByPrimaryKey(zammerGames);
+
+                } else {
+                    zammerGames = new ZammerGames();
+                    zammerGames.setZammerGameId(contentid);
+                    zammerGames.setImgUrl(image);
+                    zammerGames.setTagNames(tagnames);
+                    zammerGames.setTagIds(tagids);
+
+                    zammerGamesMapper.insert(zammerGames);
+
+                }
+            }
+
+            reader.close();
+        } catch (IOException | NullPointerException e) {
+            e.printStackTrace();
+
+        }
+    }
+
+    @Test
+    void t8() {
+        List<Integer> integers = zammerGamesMapper.selectByAllID();
+        System.out.println(integers);
+    }
+
+    @Test
+    void t9() throws Exception {
+        zammerGamesService.collectZammerGameInfo();
+    }
+
 }

@@ -108,8 +108,14 @@ generator:
   enabled: true
 
 #是否开启 swagger-ui
+# ===== 自定义swagger配置 ===== #
 swagger:
-  enabled: true
+  enable: true
+  application-name: ${spring.application.name}
+  application-version: 1.0
+  application-description: springfox swagger 3.0整合Demo
+  try-host: http://localhost:${server.port}
+
 
 # IP 本地解析
 ip:
