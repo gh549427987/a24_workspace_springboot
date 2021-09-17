@@ -36,15 +36,7 @@ public class RandomUtils {
         return time;
     }
 
-    public static void main(String[] args) {
 
-        for (int i = 0; i < 10; i++) {
-            long l = RandomInt(0, 2);
-            System.out.println(l);
-
-        }
-
-    }
 
 
 }

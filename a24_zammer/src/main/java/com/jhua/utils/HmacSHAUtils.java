@@ -53,9 +53,4 @@ public class HmacSHAUtils {
         return hash;
     }
 
-
-
-    public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeyException {
-    }
-
 }

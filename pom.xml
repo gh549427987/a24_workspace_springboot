@@ -5,6 +5,12 @@
     <packaging>pom</packaging>
     <modules>
         <module>a24_zammer</module>
+        <module>a24_core</module>
+        <module>a24_common</module>
+        <module>a24_generator</module>
+        <module>a24_tools</module>
+        <module>a24_data</module>
+        <module>a24_shiro</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -23,6 +29,10 @@
         <spring-native.version>0.10.2</spring-native.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -91,7 +101,6 @@
         </dependency>
     </dependencies>
 
-
     <repositories>
         <repository>
             <id>spring-releases</id>
@@ -113,4 +122,24 @@
         </pluginRepository>
     </pluginRepositories>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.3.7.RELEASE</version>
+                <configuration>
+                    <fork>true</fork>
+                    <mainClass>com.jhua.A24CoreApplication</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

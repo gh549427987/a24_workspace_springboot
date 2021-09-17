@@ -1,7 +1,6 @@
 package com.jhua.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.jhua.dao.GamesImagesMapper;
 import com.jhua.dao.ZammerGamesMapper;
 import com.jhua.model.ZammerGames;
 import com.jhua.service.ZammerGamesService;
@@ -32,7 +31,6 @@ public class ZammerGamesServiceImpl implements ZammerGamesService {
 
     @PostConstruct
     public void init() {
-        System.out.println("zammerGamesMapper init");
         zammerGamesServiceImpl = this;
     }
     //新增代码 结束

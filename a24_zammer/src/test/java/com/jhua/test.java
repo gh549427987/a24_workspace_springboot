@@ -1,26 +1,18 @@
 package com.jhua;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.jhua.config.Constant;
 import com.jhua.dao.GamesImagesMapper;
 import com.jhua.dao.ZammerGamesMapper;
-import com.jhua.model.GamesImages;
 import com.jhua.model.ZammerGames;
 import com.jhua.service.ZammerGamesService;
 import com.jhua.service.impl.ZammerGamesServiceImpl;
 import com.jhua.utils.ZammerUtils;
-import netscape.javascript.JSObject;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Date;
 import java.util.List;
 
 /**

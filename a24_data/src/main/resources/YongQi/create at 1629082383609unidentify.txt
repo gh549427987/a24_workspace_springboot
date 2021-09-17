@@ -1,0 +1,1 @@
+[2100 [CrashReportClient.exe, UE4PrereqSetup_x64.exe, Steadfast-Win64-Shipping.exe, Steadfast.exe, 开始游戏.exe], 2110 [Thrill Rollercoaster.exe, UnityCrashHandler64.exe, 开始游戏.exe]]

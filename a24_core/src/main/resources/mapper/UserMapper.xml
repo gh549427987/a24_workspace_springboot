@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jhua.dao.UserDao">
+
+    <insert id="save" parameterType="com.jhua.model.User" useGeneratedKeys="true" keyProperty="id">
+        insert into user values(#{id}, #{username}, #{password}, #{salt});
+    </insert>
+
+<!--    <insert id="save" parameterType="com.jhua.model.User">-->
+<!--        insert into t_user values(#{id}, #{username}, #{password}, #{salt});-->
+<!--    </insert>-->
+
+    <select id="findByUserName" parameterType="String" resultType="com.jhua.model.User">
+        select id, username, password, salt
+        from user where username = #{username};
+    </select>
+
+    <resultMap id="userMap" type="com.jhua.model.User">
+        <id column="uid" property="id"/>
+        <result column="username" property="username"/>
+        
+<!--        角色信息-->
+        <collection property="roles" javaType="list" ofType="com.jhua.model.Role">
+            <id column="rid" property="id"/>
+            <result column="rname" property="name"/>
+        </collection>
+    </resultMap>
+    
+    <select id="findRolesByUserName" parameterType="String" resultMap="userMap">
+        select u.id uid, u.username, tr.id rid, tr.name rname
+        from user u
+                 left join user_role ur on u.id = ur.user_id
+                 left join role tr on ur.role_id = tr.id
+        where u.username=#{username}
+    </select>
+
+</mapper>
